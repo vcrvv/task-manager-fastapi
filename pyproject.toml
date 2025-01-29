@@ -1,0 +1,33 @@
+[project]
+name = "fast-tasks"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "vini",email = "viniciusoliveira09_@Outlook.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "fastapi[standard] (>=0.115.7,<0.116.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+jinja2 = "^3.1.5"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+taskipy = "^1.14.1"
+
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+run = 'fastapi dev fast_tasks/app.py'
+test = 'pytest -s -x --cov=fast_tasks -vv'
+post_test = 'coverage html'
