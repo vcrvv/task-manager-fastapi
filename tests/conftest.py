@@ -1,5 +1,4 @@
 import pytest
-
 from contextlib import contextmanager
 from datetime import datetime
 
@@ -11,7 +10,7 @@ from sqlalchemy.orm import Session
 from fast_tasks.app import app
 from fast_tasks.models import User, table_registry
 from fast_tasks.database import get_session
-
+from fast_tasks.security import get_password_hash
 
 
 @pytest.fixture
@@ -46,12 +45,27 @@ def session():
 
 @pytest.fixture
 def user(session):
-    user = User(username='teste', email='teste@teste.com', password='testtest')
+    password = 'testtest'
+    user = User(
+        username='teste',
+        email='teste@teste.com',
+        password=get_password_hash(password),
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
-    
+
+    user.clean_password = password
+
     return user
+
+@pytest.fixture
+def token(client, user):
+    response = client.post(
+        '/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
+    return response.json()['access_token']
 
 
 @contextmanager
