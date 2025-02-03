@@ -17,11 +17,12 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 
 @router.post('/', response_model=TodoPublic)
 def create_todo(todo: TodoSchema, user: CurrentUser, session: T_Session):
+    
     db_todo = Todo(
-        title=todo.title,
-        description=todo.description,
-        state=todo.state,
-        user_id=user.id
+        title = todo.title,
+        description = todo.description,
+        state = todo.state,
+        user_id = user.id
     )
     session.add(db_todo)
     session.commit()
@@ -32,6 +33,7 @@ def create_todo(todo: TodoSchema, user: CurrentUser, session: T_Session):
 
 @router.get('/', response_model=TodoList)
 def list_todos(session: T_Session, user: CurrentUser, todo_filter: Annotated[FilterTodo, Query()]):
+    
     query = select(Todo).where(Todo.user_id == user.id)
     
     if todo_filter.title:
@@ -51,6 +53,7 @@ def list_todos(session: T_Session, user: CurrentUser, todo_filter: Annotated[Fil
 
 @router.patch('/{todo_id}', response_model=TodoPublic)
 def patch_todo(todo_id: int, session: T_Session, user: CurrentUser, todo: TodoUpdate):
+    
     db_todo = session.scalar(select(Todo).where(Todo.user_id == user.id, Todo.id == todo_id))
     
     if not db_todo:
@@ -68,9 +71,8 @@ def patch_todo(todo_id: int, session: T_Session, user: CurrentUser, todo: TodoUp
 
 @router.delete('/{todo_id}', response_model=Message)
 def delete_todo(todo_id: int, session: T_Session, user: CurrentUser):
-    todo = session.scalar(
-        select(Todo).where(Todo.user_id == user.id, Todo.id == todo_id)
-    )
+    
+    todo = session.scalar(select(Todo).where(Todo.user_id == user.id, Todo.id == todo_id))
 
     if not todo:
         raise HTTPException(

@@ -21,10 +21,10 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql+psycopg://app_user:app_password@fasttasks_database:5432/app_db
-      SECRET_KEY: "secret" 
-      ALGORITHM: "HS256"
-      ACCESS_TOKEN_EXPIRE_MINUTES: "30"  
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY} 
+      ALGORITHM: ${ALGORITHM}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}  
     command: sh -c "wait-for-it fasttasks_database:5432 --timeout=30 -- alembic upgrade head && uvicorn fast_tasks.app:app --host 0.0.0.0 --port 8000"
     depends_on:
       fasttasks_database:

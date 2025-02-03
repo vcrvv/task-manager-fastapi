@@ -20,6 +20,7 @@ T_Session = Annotated[Session, Depends(get_session)]
 
 @router.post('/token', response_model=Token)
 def login_for_access_token(form_data: OAuth2Form, session: T_Session):
+    
     user = session.scalar(select(User).where(User.email == form_data.username))
 
     if not user:
@@ -41,5 +42,6 @@ def login_for_access_token(form_data: OAuth2Form, session: T_Session):
 
 @router.post('/refresh_token', response_model=Token)
 def refresh_access_token(user: User = Depends(get_current_user)):
+    
     new_access_token = create_access_token(data={'user': user.email})
     return {'access_token': new_access_token, 'token_type': 'bearer'}

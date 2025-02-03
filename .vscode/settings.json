@@ -1,5 +1,0 @@
-{
-    "yaml.schemas": {
-        "https://json.schemastore.org/github-workflow.json": "file:///home/vvv/fast_tasks/.github/workflows/pipeline.yaml"
-    }
-}
