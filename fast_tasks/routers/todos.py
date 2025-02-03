@@ -50,7 +50,7 @@ def list_todos(session: T_Session, user: CurrentUser, todo_filter: Annotated[Fil
 
 
 @router.patch('/{todo_id}', response_model=TodoPublic)
-def path_todo(todo_id: int, session: T_Session, user: CurrentUser, todo: TodoUpdate):
+def patch_todo(todo_id: int, session: T_Session, user: CurrentUser, todo: TodoUpdate):
     db_todo = session.scalar(select(Todo).where(Todo.user_id == user.id, Todo.id == todo_id))
     
     if not db_todo:
